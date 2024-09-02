@@ -1,29 +1,80 @@
-// export function createHeader() {
-//   const headerContainer = document.getElementById('headerContainer');
+import { navigateTo } from "../router.js";
+import { createSelectElements } from "./componentsSelect.js";
 
-//   const header = document.createElement('header');
-
-
-// }
-
-export function createHeader () {
+export function createHeader() {
   const header = document.createElement('header');
+  header.className = 'header';
+
+
   const imageHeader = document.createElement('img')
   imageHeader.setAttribute("src", '../img/IMAGEN HEADER.png');
   imageHeader.className = 'imageHeader';
-  const createHeader = document.createElement('h1');
-  createHeader.innerHTML = 'Game Time';
+  imageHeader.id = 'imageHeaderId';
+
+  const titleHeader = document.createElement('h1');
+  titleHeader.innerHTML = 'Game Time';
 
   header.appendChild(imageHeader);
-  header.appendChild(createHeader);
+  header.appendChild(titleHeader);
+
+  imageHeader.addEventListener('click', () => {
+    navigateTo('/');
+  });
+
   return header;
 }
-/*
-export const createHeader = () => {
-  const header = document.createElement('header');
-  const titulo = document.createElement('h1');
-  titulo.textContent = 'Game Time';
-  header.appendChild(titulo);
-  console.log('Header created:', header); // Verificar que el header se crea correctamente
-  return header;
-};*/
+
+export function createHeaderResponsive(applyFilters) {
+  const headerResponsive = document.createElement('header');
+  headerResponsive.className = 'headerResponsive';
+
+  const menuResponsive = document.createElement('img')
+  menuResponsive.setAttribute("src", '../img/Menu Hamburguesa.png');
+  menuResponsive.className = 'menuResponsive';
+
+  const titleHeaderResponsive = document.createElement('h2');
+  titleHeaderResponsive.innerHTML = 'Game Time';
+  titleHeaderResponsive.className = 'titleHeaderResponsive';
+
+  const imageHeaderResponsive = document.createElement('img')
+  imageHeaderResponsive.setAttribute("src", '../img/IMAGEN HEADER RESPONSIVE.png');
+  imageHeaderResponsive.className = 'imageHeaderResponsive';
+  imageHeaderResponsive.id = 'imageHeaderIdResponsive';
+
+  headerResponsive.appendChild(menuResponsive);
+  headerResponsive.appendChild(titleHeaderResponsive);
+  headerResponsive.appendChild(imageHeaderResponsive);
+
+  imageHeaderResponsive.addEventListener('click', () => {
+    navigateTo('/');
+  });
+
+
+  const overlayMenu = document.createElement('div');
+  overlayMenu.className = 'overlayMenu';
+
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'closeOverlay';
+  closeBtn.innerHTML = 'X';
+
+  const filterContainer = document.createElement('div');
+  filterContainer.className = 'filterContainer'; 
+
+  const selectElements = createSelectElements(applyFilters);
+  filterContainer.appendChild(selectElements);
+
+  overlayMenu.appendChild(closeBtn);
+  overlayMenu.appendChild(filterContainer);
+  document.body.appendChild(overlayMenu);
+
+  menuResponsive.addEventListener('click', () => {
+    overlayMenu.style.display = 'flex';
+  });
+
+  closeBtn.addEventListener('click', () => {
+    overlayMenu.style.display = 'none';
+  });
+
+  return headerResponsive;
+  
+}

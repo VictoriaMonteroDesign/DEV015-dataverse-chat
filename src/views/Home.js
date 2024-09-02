@@ -1,187 +1,85 @@
-//import { filterData, ordenarABC} from '../dataFunctions.js';
 import { renderItems } from '../components/componentsCards.js';
-import { createHeader } from '../components/componentsHeader.js';
-
+import { createSelectElements } from '../components/componentsSelect.js';
+import { createHeader, createHeaderResponsive } from '../components/componentsHeader.js';
+import { createFooter } from '../components/componentsFooter.js';
+import { filterData, ordenarABC } from '../lib/dataFunctions.js';
 import data from '../data/dataset.js';
-/*
+
 export const Home = () => {
   const container = document.createElement('div');
-  container.id = 'home';
+  container.className = 'containerHome';
+
+  const containerHeader = document.createElement('div');
+  containerHeader.className = 'containerHeaderHome';
+
+  const HeaderResponsive = document.createElement('div');
+  HeaderResponsive.className = 'containerHeaderResponsive';
+
+  const containerBody = document.createElement('div');
+  containerBody.className = 'containerBodyHome';
+  containerBody.id = 'containerBodyHome';
+
+  const containerFooter = document.createElement('div');
+  containerFooter.className = 'containerFooterHome';
 
   const header = createHeader();
-  console.log('Header element:', header); // Añadido para verificar el header
-  container.appendChild(header);
+  
 
-  const datadetarjetas = renderItems(data);
-  console.log('Data de tarjetas:', datadetarjetas); // Añadido para verificar las tarjetas
-  container.appendChild(datadetarjetas);
-
-  console.log('Home component:', container); // Añadido para verificar el contenedor
-  return container;
-};*/
+  
+  const cardsContainer = document.createElement('div');
+  cardsContainer.className = 'cardsContainer';
 
 
-export const Home = () => {
-  const container = document.createElement('div');
+  const applyFilters = () => {
+    const category = document.getElementById('filtro-categoria').value;
+    const year = document.getElementById('filtro-año').value;
+    const ranking = document.getElementById('filtro-ranking').value;
+    const order = document.getElementById('ordenar').value;
 
-  const tituloPrincipal = createHeader();
-  const datadetarjetas = renderItems(data);
-  container.appendChild(tituloPrincipal);
-  container.appendChild(datadetarjetas);
-  return container;
-}
+    let filteredData = data;
 
-/*
-const tarjetadedata = document.querySelector('#root');
-const datadetarjetas = renderItems(data);
+    if (category !== 'Seleccionar') {
+      filteredData = filterData(filteredData, 'facts.category', category);
+    }
 
-tarjetadedata.appendChild(datadetarjetas);
+    if (year !== 'Seleccionar') {
+      filteredData = filterData(filteredData, 'facts.yearOfCreation', year);
+    }
 
+    if (ranking !== 'Seleccionar') {
+      filteredData = filterData(filteredData, 'facts.ranking', ranking);
+    }
 
-const selectCategoria = document.querySelector('#filtro-categoria');
-const selectAño = document.querySelector('#filtro-año');
-const selectRanking = document.querySelector('#filtro-ranking');
-const selectOrdenar = document.querySelector('#ordenar');
+    if (order !== 'Seleccionar') {
+      filteredData = ordenarABC(filteredData, order);
+    }
 
-let appliedFilters = {
-  category: 'seleccionar',
-  yearOfCreation: 'seleccionar',
-  ranking: 'seleccionar',
-  orden: 'seleccionar',
-};
-
-const applyFilters = () => {
-  let filteredData = data;
-
-  if (appliedFilters.category !== 'seleccionar') {
-    filteredData = filterData(filteredData, 'facts.category', appliedFilters.category);
-  }
-
-
-  if (appliedFilters.yearOfCreation !== 'seleccionar') {
-    filteredData = filterData(filteredData, 'facts.yearOfCreation', appliedFilters.yearOfCreation);
-  }
-
-  if (appliedFilters.ranking !== 'seleccionar') {
-    filteredData = filterData(filteredData, 'facts.ranking', appliedFilters.ranking);
-  }
-
-  if (appliedFilters.orden !== 'seleccionar') {
-    filteredData = ordenarABC(filteredData, appliedFilters.orden);
-  }
-  tarjetadedata.innerHTML = '';
-
-  if (filteredData.length === 0) {
-    const noResultsMessage = document.createElement('h3');
-    noResultsMessage.textContent = 'No se encontraron coincidencias';
-    tarjetadedata.appendChild(noResultsMessage);
-
-  } else {
+ 
+    cardsContainer.innerHTML = ''; 
     const filteredItems = renderItems(filteredData);
-    tarjetadedata.appendChild(filteredItems);
-  }
-};
-
-applyFilters();
-
-selectCategoria.addEventListener('change', (event) => {
-  appliedFilters.category = event.target.value;
-  applyFilters();
-});
-
-selectAño.addEventListener('change', (event) => {
-  appliedFilters.yearOfCreation = event.target.value;
-  applyFilters();
-});
-
-selectRanking.addEventListener('change', (event) => {
-  appliedFilters.ranking = event.target.value;
-  applyFilters();
-});
-
-selectOrdenar.addEventListener('change', (event) => {
-  appliedFilters.orden = event.target.value;
-  applyFilters();
-});
-
-
-const botonLimpiar = document.querySelector('.limpiar-filtros');
-function limpiarFiltros() {
-  selectCategoria.selectedIndex = 'Seleccionar';
-  selectAño.selectedIndex = 'Seleccionar';
-  selectRanking.selectedIndex = 'Seleccionar';
-  selectOrdenar.selectedIndex = 'Seleccionar';
-
-  appliedFilters = {
-    category: 'seleccionar',
-    yearOfCreation: 'seleccionar',
-    ranking: 'seleccionar',
-    orden: 'seleccionar',
+    cardsContainer.appendChild(filteredItems);
   };
-  tarjetadedata.innerHTML = '';
 
-  tarjetadedata.appendChild(datadetarjetas);
-}
+ 
+  const selectElements = createSelectElements(applyFilters);
+  const datadetarjetas = renderItems(data);
 
-botonLimpiar.addEventListener("click", limpiarFiltros);
+ 
+  containerBody.appendChild(selectElements);
+  cardsContainer.appendChild(datadetarjetas);
+  containerBody.appendChild(cardsContainer);
 
+  const headerResponsive = createHeaderResponsive(applyFilters);
 
+  const footer = createFooter();
 
-const calcularRankingPromedio = (data, year) => {
+  containerHeader.appendChild(header);
+  containerHeader.appendChild(headerResponsive);
+  containerFooter.appendChild(footer);
 
-  const juegosDelAño = data.filter(item => item.facts.yearOfCreation === year);
-  const sumaDeRankings = juegosDelAño.reduce((sum, item) => sum + parseFloat(item.facts.ranking), 0);
-  const rankingPromedio = sumaDeRankings / juegosDelAño.length;
-  return rankingPromedio;
+  container.appendChild(containerHeader);
+  container.appendChild(containerBody);
+  container.appendChild(containerFooter);
+
+  return container;
 };
-
-const rankingPromedio2016 = calcularRankingPromedio(data, "2016");
-const rankingAv2016 = document.getElementById('rankingPromedio2016');
-rankingAv2016.textContent = `${rankingPromedio2016.toFixed(1)}`;
-
-
-
-//género mejor rankeado 
-
-function generoMejorRankeado(data) {
-  const resultado = data.reduce((acc, juego) => {
-    const categoria = juego.facts.category;
-    const ranking = parseFloat(juego.facts.ranking);
-
-    if (!acc[categoria]) {
-      acc[categoria] = { totalRanking: 0, count: 0 };
-    }
-
-    acc[categoria].totalRanking += ranking;
-    acc[categoria].count += 1;
-
-    return acc;
-  }, {});
-
-  let mejorCategoria = null;
-  let mejorPromedio = 0;
-
-  for (const categoria in resultado) {
-    const promedio = resultado[categoria].totalRanking / resultado[categoria].count;
-    if (promedio > mejorPromedio) {
-      mejorPromedio = promedio;
-      mejorCategoria = categoria;
-    }
-  }
-
-  return mejorCategoria;
-}
-
-const mejorRanking = generoMejorRankeado(data);
-const mejorGenero = document.getElementById('mejorRanking');
-mejorGenero.textContent = `${(mejorRanking)}`;
-
-document.addEventListener('DOMContentLoaded', function () {
-  const menuHamburguesa = document.getElementById('menu-hamburguesa');
-  const barraLateral = document.getElementById('barra-lateral');
-
-  menuHamburguesa.addEventListener('click', function () {
-    barraLateral.classList.toggle('barra-lateral-desplegada');
-  });
-})
-*/

@@ -1,14 +1,28 @@
+import { navigateTo } from "../router.js";
 export const renderItems = (data) => {
 
 
   const ul = document.createElement("ul");
+  ul.id = 'card';
+  //ul.addEventListener('click', () => {
+  //navigateTo('/chat-individual');
+  //});
   data.forEach(item => {
     const li = document.createElement('li');
+    li.setAttribute('data-id', item.id);    //asignar id para cada videojuego
     // li.setAttribute("itemtype",)
 
-    const chatIcon = document.createElement('div');
+    const chatIcon = document.createElement('img');
+    chatIcon.setAttribute("src", '../img/Chat Icon Blanco.png');
     chatIcon.className = 'chatIcon';
-    chatIcon.innerHTML = '&#x1F4AC;';
+
+    chatIcon.id = 'chatIcon';
+    
+    chatIcon.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const gameId = li.getAttribute('data-id');
+      navigateTo("/chat-individual",{ data: gameId});
+    });
 
     const nameElement = document.createElement('h3');
     nameElement.textContent = item.name;
@@ -23,13 +37,13 @@ export const renderItems = (data) => {
     descriptionElement.textContent = item.description;*/
 
     const categoryElement = document.createElement('p');
-    categoryElement.innerHTML = `<strong class="bold-text">Categoría:</strong> ${item.facts.category}`;
+    categoryElement.innerHTML = `<strong class="boldText">Categoría:</strong> ${item.facts.category}`;
 
     const yearOfCreationElement = document.createElement('p');
-    yearOfCreationElement.innerHTML = `<strong class="bold-text">Año de Creación:</strong> ${item.facts.yearOfCreation}`;
+    yearOfCreationElement.innerHTML = `<strong class="boldText">Año de Creación:</strong> ${item.facts.yearOfCreation}`;
 
     const rankingElement = document.createElement('p');
-    rankingElement.innerHTML = `<strong class="bold-text">Calificación:</strong> ${item.facts.ranking}`;
+    rankingElement.innerHTML = `<strong class="boldText">Calificación:</strong> ${item.facts.ranking}`;
 
     li.appendChild(chatIcon);
     li.appendChild(nameElement);
@@ -46,6 +60,3 @@ export const renderItems = (data) => {
 
   return ul;
 };
-
-
-

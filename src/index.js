@@ -1,41 +1,27 @@
-// En este archivo definirás tus rutas e importarás los componentes que vas a renderizar.
+import { setRootEl, setRoutes, onURLChange } from './router.js';
+import { Home } from './views/Home.js';
+import { ChatIndividual } from './views/ChatIndividual.js';
+// import { chatGrupal } from './views/chatGrupal.js';
+import { ErrorView } from './views/Error.js';
+import { api } from './views/Api.js';
 
-/*
-import Home from './views/Home.js';
-importar todas las views que creamos
+document.addEventListener('DOMContentLoaded', () => {
+  const root = document.getElementById('root');
+  setRootEl(root);
 
+  setRoutes({
+    '/': (props) => Home(props),
+    '/chat-individual':  (props) => ChatIndividual(props),
+    // '/chat-grupal': chatGrupal,
+    '/error': ErrorView,
+    '/api' : api,
+  });
 
+  onURLChange();
+  
+});
 
-Ejemplo de definición de rutas:
-*/
-/*
-TODO:
-1.- Definir rutas en router.
-2.- Pasar "root element" a router.
-3.- Invocar el router para renderizar la vista correcta.
-
-Llamar elemento route 
-
-*/
-
-// window.addEventListener("DOMContentLoaded", () => {
-//   // set root element
-//   // invoke onURLChange 
-// });
-
-// // Handle URL changes
-// window.addEventListener('popstate', ({objetivo}) => {
-//   onURLChange(/* location */);
-// });
+window.addEventListener('popstate', onURLChange);
 
 
-import { Home } from './views/Home.js'
-// import { createHeader } from './components/componentsHeader.js';
-
-// document.addEventListener('DOMContentLoaded', function(){
-//   createHeader();
-// });
-
-const rootElement = document.getElementById('root');
-rootElement.appendChild(Home()); 
 
