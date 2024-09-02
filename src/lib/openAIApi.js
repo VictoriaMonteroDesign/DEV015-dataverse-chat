@@ -20,6 +20,7 @@ export const communicateWithOpenAI = async (messages) => {
         messages: messages, 
         temperature: 0.9, 
         max_tokens: 250
+
       })
     });
 
